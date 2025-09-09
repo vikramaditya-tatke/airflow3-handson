@@ -1,17 +1,97 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-    "image": "mcr.microsoft.com/devcontainers/universal:2",
-    "features": {
-        "ghcr.io/astronomer/devcontainer-features/astro-cli:1": {
-        "version":"v1.34.0"
-      }
-    },
-    "forwardPorts": [8080, 5432],
-    "portsAttributes": {
-      "8080": {
-        "label": "api-server"
-      },
-      "5432": {
-        "label": "postgres"
+  "name": "Airflow-ClickHouse",
+  "service": "airflow-clickhouse-devcontainer",
+  "workspaceFolder": "/workspaces/WorkProjects/${localWorkspaceFolderBasename}",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "charliermarsh.ruff", //https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff
+        "ms-python.python",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "ms-toolsai.datawrangler",
+        "mhutchie.git-graph",
+        "RooVeterinaryInc.roo-cline",
+        "ms-toolsai.jupyter",
+        "Catppuccin.catppuccin-vsc",
+        "atommaterial.a-file-icon-vscode"
+      ],
+      "settings": {
+        //
+        // Python
+        //
+        "dbcode.connections": [
+          {
+            "connectionId": "v4H63oNYmZtLaVyqzUudm",
+            "name": "ClickHouse Local",
+            "driver": "clickhouse",
+            "color": "#FFC54F",
+            "host": "localhost",
+            "port": 8123,
+            "ssl": false,
+            "username": "clickhouse",
+            "password": "clickhouse",
+            "savePassword": "secretStorage",
+            "readOnly": false,
+            "connectionType": "host"
+          }
+        ],
+        "dbcode.ai.mcp.autoStart": true,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit",
+          "source.organizeImports": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnType": true,
+        "editor.fontLigatures": true,
+        "editor.fontFamily": "JetBrainsMono Nerd Font Mono",
+        "editor.fontSize": 13,
+        "git.blame.editorDecoration.enabled": true,
+        "notebook.defaultFormatter": "charliermarsh.ruff",
+        "python.analysis.typeCheckingMode": "standard",
+        "ruff.configurationPreference": "editorFirst",
+        "ruff.enable": true,
+        "ruff.fixAll": true,
+        "ruff.lint.enable": true,
+        "ruff.organizeImports": true,
+        "ruff.showSyntaxErrors": true,
+        "ruff.lineLength": 88,
+        "ruff.nativeServer": "on",
+        // "ruff.configuration": "/workspaces/WorkProjects/shq-de-data-pipelines/ruff.toml",
+        "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
+        "terminal.integrated.fontLigatures.enabled": true,
+        "workbench.colorTheme": "Catppuccin Mocha",
+        "workbench.preferredDarkColorTheme": "Catppuccin Mocha"
       }
     }
+  },
+  "postCreateCommand": "pre-commit install && curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir $HOME/.fnm/ --skip-shell && export PATH=$HOME/.fnm/bin:$PATH && $HOME/.fnm/fnm install 22 && astro dev start -n --wait 5m",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
+      "plugins": "zsh-autosuggestions zsh-syntax-highlighting",
+      "omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions.git https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    },
+    "ghcr.io/astronomer/devcontainer-features/astro-cli:1": {
+      "version": "v1.34.0"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {},
+    "ghcr.io/devcontainers-extra/features/neovim-apt-get:1": {},
+    "ghcr.io/gvatsal60/dev-container-features/pre-commit:1": {},
+    "./features/clickhouse-client": {}
   }
+}
